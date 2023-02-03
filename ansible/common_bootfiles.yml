@@ -1,0 +1,26 @@
+---
+- name: Extract ISO
+  hosts: localhost
+  vars:
+    src_iso: "{{ src_folder }}/{{ iso_file }}"
+    dst_folder: "{{ iso_tmp }}"
+  gather_facts: false
+  roles:
+    - download_iso
+    - extract_iso
+
+- name: Copy Common Bootfiles
+  hosts: boothost
+  gather_facts: false
+  roles:
+    - copy_common_boot_files
+
+- name: Cleanup
+  hosts: localhost
+  gather_facts: false
+  vars:
+    paths:
+      - "{{ iso_tmp }}"
+
+  roles:
+    - cleanup

@@ -1,0 +1,26 @@
+---
+- name: Create Cluster
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      kind: Cluster
+      apiVersion: provisioning.cattle.io/v1
+      metadata:
+        name: "{{ cluster_name }}"
+        namespace: fleet-default
+      spec:
+        rkeConfig:
+          machinePools:
+            - controlPlaneRole: true
+              etcdRole: true
+              machineConfigRef:
+                apiVersion: elemental.cattle.io/v1beta1
+                kind: MachineInventorySelectorTemplate
+                name: "{{ machine_reg }}-{{ node_location }}"
+              name: nodepool
+              quantity: "{{ node_quantity }}"
+              unhealthyNodeTimeout: 0s
+              workerRole: true
+            
+        kubernetesVersion: "{{ kubernetes_version }}"

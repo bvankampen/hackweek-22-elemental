@@ -1,0 +1,6 @@
+---
+- name: Delete temporary files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ paths }}"

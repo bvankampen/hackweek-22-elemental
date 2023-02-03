@@ -1,0 +1,4 @@
+---
+- name: Extract ISO
+  ansible.builtin.shell:
+    cmd: "xorriso -osirrox on -indev {{ src_iso }} -extract / {{ dst_folder }}"

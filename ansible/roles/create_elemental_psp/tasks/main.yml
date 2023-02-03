@@ -1,0 +1,83 @@
+- name: Create Namespace
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    api_version: v1
+    name: cattle-elemental-system
+    kind: Namespace
+  when: install_psp
+
+- name: Create PodSecurityPolicy
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: policy/v1beta1
+      kind: PodSecurityPolicy
+      metadata:
+          name: psp-elemental
+          annotations:
+            seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+      spec:
+        privileged: true
+        allowPrivilegeEscalation: true
+        allowedCapabilities:
+        - '*'
+        volumes:
+        - '*'
+        hostNetwork: true
+        hostPorts:
+        - min: 0
+          max: 65535
+        hostIPC: true
+        hostPID: true
+        runAsUser:
+          rule: 'RunAsAny'
+        seLinux:
+          rule: 'RunAsAny'
+        supplementalGroups:
+          rule: 'RunAsAny'
+        fsGroup:
+          rule: 'RunAsAny'
+  when: install_psp
+
+
+- name: Create ClusterRole
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: clusterrole-elemental
+      rules:
+      - apiGroups:
+        - policy
+        resourceNames:
+        - psp-elemental
+        resources:
+        - podsecuritypolicies
+        verbs:
+        - use
+  when: install_psp
+
+- name: Create RoleBinding
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      metadata:
+        name: rolebinding-elemental
+        namespace: cattle-elemental-system
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: clusterrole-elemental
+      subjects:
+      - apiGroup: rbac.authorization.k8s.io
+        kind: Group
+        name: system:serviceaccounts:cattle-elemental-system
+  when: install_psp

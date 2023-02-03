@@ -1,0 +1,17 @@
+- name: Create Namespace
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    api_version: v1
+    name: cattle-elemental-system
+    kind: Namespace
+
+- name: Install Elemental Operator
+  kubernetes.core.helm:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    name: elemental-operator 
+    release_namespace: cattle-elemental-system
+    chart_ref: "oci://registry.opensuse.org/isv/rancher/elemental/stable/charts/rancher/elemental-operator-chart"
+
+#   helm upgrade --create-namespace -n cattle-elemental-system --install elemental-operator oci://registry.opensuse.org/isv/rancher/elemental/stable/charts/rancher/elemental-operator-chart

@@ -1,0 +1,17 @@
+---
+- name: Get registration file url
+  set_fact:
+    registration_url: "{{ (query('kubernetes.core.k8s', 
+      api_version='elemental.cattle.io/v1beta1', 
+      kind='MachineRegistration', 
+      namespace='fleet-default', 
+      resource_name=machine_reg,
+      kubeconfig=kubeconfig
+      ))[0].status.registrationURL }}"
+
+- name: Download registration file
+  ansible.builtin.get_url:
+    url: "{{ registration_url }}"
+    dest: "{{ src_folder }}/{{ machine_reg }}.yaml"
+    force: true
+

@@ -1,0 +1,6 @@
+---
+- name: Create VMS
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - create_vm

@@ -1,0 +1,13 @@
+---
+- name: Check if Elemental ISO exists
+  ansible.builtin.stat:
+    path: "{{ src_folder }}/{{ iso_file }}"
+  register: elemental_iso_file
+
+- name: Download Elemental ISO
+  ansible.builtin.get_url:
+    url: "{{ elemental_iso_url }}"
+    dest: "{{ src_folder }}/{{ iso_file }}"
+  when: not elemental_iso_file.stat.exists
+
+

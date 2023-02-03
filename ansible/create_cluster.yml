@@ -1,0 +1,43 @@
+---
+- name: Create Boot Config
+  hosts: boothost
+  gather_facts: false
+  roles:
+    - configure_vm_boot
+
+- name: Create Machine Registration in Rancher
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - machine_registration
+
+- name: Build Elemental ISO
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - registration_file
+    - download_iso
+    - build_iso
+
+- name: Configure Boot Host and upload data
+  hosts: boothost
+  gather_facts: false
+  roles:
+    - copy_boot_files
+
+- name: Cleanup
+  hosts: localhost
+  gather_facts: false
+  vars:
+    paths:
+      - "{{ src_folder }}/{{ machine_reg }}.yaml"
+      - "{{ iso_tmp }}"
+      - "{{ src_folder }}/{{ machine_reg }}-{{ iso_file }}"
+  roles:
+    - cleanup
+
+- name: Create cluster
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - create_cluster

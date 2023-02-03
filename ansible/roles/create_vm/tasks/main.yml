@@ -1,0 +1,17 @@
+---
+- name: Create Volume
+  ansible.builtin.shell:
+    cmd: "virsh -c qemu:///system vol-create-as --pool default --name {{ machine_reg }}-{{ item.key }}-0-disk.qcow2 --capacity 50G --format qcow2 --allocation 0"
+  with_dict: "{{ vms }}"
+
+- name: Define VM with libvirt on KVM
+  community.libvirt.virt:
+    command: define
+    xml: "{{ lookup('template','virtual-machine.xml.j2') }}"
+  with_dict: "{{ vms }}"
+
+- name: Start VM
+  community.libvirt.virt:
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: running
+  with_dict: "{{ vms }}"

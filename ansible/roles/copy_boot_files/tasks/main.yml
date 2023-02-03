@@ -1,0 +1,25 @@
+---
+- name: Create bootfolder for cluster specifc files
+  ansible.builtin.file:
+    path: "/srv/tftpboot/{{ machine_reg }}/"
+    state: directory
+
+- name: Copy /boot files
+  ansible.builtin.copy:
+    src: "{{ iso_tmp }}/boot" 
+    dest: "/srv/tftpboot/{{ machine_reg }}/"
+    owner: "tftp"
+    group: "tftp"
+
+- name: Copy Elemental ISO
+  ansible.builtin.copy:
+    src: "{{ src_folder }}/{{ machine_reg }}-{{ iso_file }}" 
+    dest: "/srv/tftpboot/{{ machine_reg }}/{{ iso_file }}"
+    owner: "tftp"
+    group: "tftp"
+
+- name: Edit grub.cfg for network boot
+  ansible.builtin.replace:
+    path: "/srv/tftpboot/{{ machine_reg }}/boot/grub2/grub.cfg"
+    regexp: '(.*)CDLABEL\=COS_LIVE(.*)?$'
+    replace: '\1http://{{ ansible_host }}/{{ machine_reg }}/{{ iso_file }}\2'

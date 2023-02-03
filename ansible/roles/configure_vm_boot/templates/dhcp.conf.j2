@@ -1,0 +1,3 @@
+{% for key, value in vms.items() %}
+dhcp-host={{ value.mac_addr }},{{ value.ip }}
+{% endfor %}

@@ -1,0 +1,17 @@
+---
+- name: Create DHCP reservation file for dnsmasq
+  ansible.builtin.template:
+    src: ../templates/dhcp.conf.j2
+    dest: "/etc/dnsmasq.d/dhcp-{{ machine_reg }}.conf"
+
+- name: Create grub.config for VM
+  ansible.builtin.template:
+    src: ../templates/grub.cfg.j2
+    dest: "/srv/tftpboot/EFI/BOOT/grub.cfg-01-{{ item.value.mac_addr | replace(':','-') }}"
+  with_dict: "{{ vms }}"
+
+- name: Restart dnsmasq.service to reload config
+  ansible.builtin.systemd:
+    name: dnsmasq.service
+    state: restarted
+

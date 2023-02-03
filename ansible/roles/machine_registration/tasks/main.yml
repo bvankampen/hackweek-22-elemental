@@ -1,0 +1,48 @@
+---
+- name: Create MachineInventorySelectorTemplate
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: elemental.cattle.io/v1beta1
+      kind: MachineInventorySelectorTemplate
+      metadata:
+        name: "{{ machine_reg }}-{{ node_location }}"
+        namespace: fleet-default
+      spec:
+        template:
+          spec:
+            selector:
+              matchExpressions:
+                - key: location
+                  operator: In
+                  values: 
+                  - "{{ node_location }}"
+
+- name: Create MachineRegistration
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: elemental.cattle.io/v1beta1
+      kind: MachineRegistration
+      metadata:
+        name: "{{ machine_reg }}"
+        namespace: fleet-default
+      spec:
+        config:
+          cloud-config:
+            users:
+              - name: root
+                passwd: root
+          elemental:
+            install:
+              reboot: true
+              device: /dev/vda
+              debug: true
+        machineInventoryLabels:
+          location: "{{ node_location }}"
+          manufacturer: "${System Information/Manufacturer}"
+          productName: "${System Information/Product Name}"
+          serialNumber: "${System Information/Serial Number}"
+          machineUUID: "${System Information/UUID}"

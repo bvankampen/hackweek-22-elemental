@@ -1,0 +1,22 @@
+---
+- name: Copy dnsmasq config file
+  ansible.builtin.copy:
+    src: "files/grub-efi.conf" 
+    dest: "/etc/dnsmasq.d/"
+    owner: "root"
+    group: "root"
+    mode: 644
+
+- name: Copy /boot files
+  ansible.builtin.copy:
+    src: "{{ iso_tmp }}/boot" 
+    dest: "/srv/tftpboot/"
+    owner: "tftp"
+    group: "tftp"
+
+- name: Copy /EFI files
+  ansible.builtin.copy:
+    src: "{{ iso_tmp }}/EFI" 
+    dest: "/srv/tftpboot/"
+    owner: "tftp"
+    group: "tftp"

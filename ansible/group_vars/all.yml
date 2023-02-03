@@ -1,0 +1,7 @@
+ansible_python_interpreter: auto_silent
+iso_file: elemental-teal.x86_64.iso
+src_folder: ../src
+iso_tmp: "{{ src_folder }}/tmp_iso"
+kubeconfig: "~/.kube/rancher-elemental.yaml"
+elemental_iso_url: "https://download.opensuse.org/repositories/isv:/Rancher:/Elemental:/Stable:/Teal53/media/iso/elemental-teal.x86_64.iso"
+iso_add_reg_url: "https://raw.githubusercontent.com/rancher/elemental/main/.github/elemental-iso-add-registration"

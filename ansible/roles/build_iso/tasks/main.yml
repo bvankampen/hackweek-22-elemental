@@ -1,0 +1,30 @@
+---
+- name: Download Elemental ISO Add Registration Script
+  ansible.builtin.get_url:
+    url: "{{ iso_add_reg_url }}"
+    dest: "{{ src_folder }}"
+    mode: "u+rwx"
+  register: iso_add_reg_script
+
+- name: Create ISO Temporary Folder
+  ansible.builtin.file:
+    path: "{{ iso_tmp }}"
+    state: directory
+
+- name: Build ISO
+  ansible.builtin.shell:
+    chdir: "{{ iso_tmp }}"
+    cmd: "../{{ iso_add_reg_script.dest }} ../{{ machine_reg }}.yaml ../{{ iso_file }}"
+
+- name: Delete Registration Script
+  ansible.builtin.file:
+    path: "{{ iso_add_reg_script.dest }}"
+    state: absent
+
+- name: Move build ISO
+  ansible.builtin.shell:
+    cmd: "mv {{ iso_tmp }}/{{ iso_file }} {{ src_folder }}/{{ machine_reg }}-{{ iso_file }}"
+
+- name: Extract ISO
+  ansible.builtin.shell:
+    cmd: "xorriso -osirrox on -indev {{ src_folder }}/{{ machine_reg }}-{{ iso_file }} -extract / {{ iso_tmp }} "

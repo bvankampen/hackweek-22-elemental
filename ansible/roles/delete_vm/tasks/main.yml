@@ -1,0 +1,11 @@
+---
+- name: Stop VM
+  community.libvirt.virt:
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: destroyed
+  with_dict: "{{ vms }}"
+
+- name: Delete VM and Storage
+  ansible.builtin.shell:
+    cmd: "virsh -c qemu:///system undefine --nvram --wipe-storage --remove-all-storage {{ machine_reg }}-{{ item.key }}"
+  with_dict: "{{ vms }}"
