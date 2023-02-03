@@ -3,3 +3,4 @@ archive
 
 src/*
 !.gitkeep
+.gitignore
