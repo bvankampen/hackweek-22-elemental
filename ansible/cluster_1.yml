@@ -1,15 +1,15 @@
-cluster_name: cluster-1
+cluster_name: cluster-elemental-1
 node_quantity: 3
 kubernetes_version: v1.24.8+k3s1
-machine_reg: homelab-cluster-1
-node_location: homelab-cluster-1
+machine_reg: homelab-cluster-elemental-1
+node_location: homelab-cluster-elemental-1
 vms:
-  elemental-node-1:
-    mac_addr: 52:54:00:2e:ef:a1
+  node-1:
+    mac_addr: 00:50:56:2e:ef:a1
     ip: 192.168.100.101
-  elemental-node-2:
-    mac_addr: 52:54:00:2e:ef:a2
+  node-2:
+    mac_addr: 00:50:56:2e:ef:a2
     ip: 192.168.100.102
-  elemental-node-3:
-    mac_addr: 52:54:00:2e:ef:a3
+  node-3:
+    mac_addr: 00:50:56:2e:ef:a3
     ip: 192.168.100.103

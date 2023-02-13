@@ -1,0 +1,24 @@
+---
+- name: Delete MachineInventorySelectorTemplate
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: elemental.cattle.io/v1beta1
+      kind: MachineInventorySelectorTemplate
+      metadata:
+        name: "{{ machine_reg }}-{{ node_location }}"
+        namespace: fleet-default
+
+
+- name: Delete MachineRegistration
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      apiVersion: elemental.cattle.io/v1beta1
+      kind: MachineRegistration
+      metadata:
+        name: "{{ machine_reg }}"
+        namespace: fleet-default
+ 

@@ -1,0 +1,12 @@
+---
+- name: Delete Machine Registration in Rancher
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - delete_machine_registration
+
+- name: Delete cluster
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - delete_cluster

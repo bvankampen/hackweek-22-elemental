@@ -1,0 +1,24 @@
+---
+- name: Poweroff VM on VMware
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter }}"
+    folder: "{{ folder }}"
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: poweredoff
+  delegate_to: localhost        
+  with_dict: "{{ vms }}"
+
+- name: Delete VM on VMware
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false    
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: absent    
+  delegate_to: localhost        
+  with_dict: "{{ vms }}"

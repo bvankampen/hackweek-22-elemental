@@ -1,0 +1,11 @@
+---
+- name: Delete Cluster
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: "{{ kubeconfig }}"
+    definition:
+      kind: Cluster
+      apiVersion: provisioning.cattle.io/v1
+      metadata:
+        name: "{{ cluster_name }}"
+        namespace: fleet-default

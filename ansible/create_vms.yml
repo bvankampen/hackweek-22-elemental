@@ -3,4 +3,4 @@
   hosts: localhost
   gather_facts: false
   roles:
-    - create_vm
+    - create_vm_vmware

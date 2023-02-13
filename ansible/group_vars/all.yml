@@ -2,6 +2,18 @@ ansible_python_interpreter: auto_silent
 iso_file: elemental-teal.x86_64.iso
 src_folder: ../src
 iso_tmp: "{{ src_folder }}/tmp_iso"
-kubeconfig: "~/.kube/rancher-elemental.yaml"
+kubeconfig: "~/.kube/rancher-p6lab.yaml"
 elemental_iso_url: "https://download.opensuse.org/repositories/isv:/Rancher:/Elemental:/Stable:/Teal53/media/iso/elemental-teal.x86_64.iso"
 iso_add_reg_url: "https://raw.githubusercontent.com/rancher/elemental/main/.github/elemental-iso-add-registration"
+elemental_install_device: "/dev/sda" # /dev/vda for kvm /dev/sda for vmware
+
+# Variables for Vcenter Deployment
+vcenter_host: "{{ lookup('env','VCENTER_HOST') }}"
+vcenter_username: "{{ lookup('env','VCENTER_USERNAME') }}"
+vcenter_password: "{{ lookup('env','VCENTER_PASSWORD') }}"
+datastore: "esx-dell-nvme-2"
+datacenter: "datacenter"
+esxhost: "esx-dell.p6lab.net"
+folder: "elemental"
+network: "vm-network-vlan-1001"
+resourcepool: "elemental"

@@ -1,0 +1,57 @@
+---
+- name: Create VM on VMware
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter }}"
+    folder: "{{ folder }}"
+    resource_pool: "{{ resourcepool }}"
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: present
+    guest_id: sles15_64Guest 
+    esxi_hostname: "{{ esxhost }}"
+    disk:
+    - size_gb: 50
+      type: thin
+      datastore: "{{ datastore }}"
+    hardware:
+      memory_mb: 8192
+      num_cpus: 2
+      scsi: paravirtual
+      secure_boot: false
+      boot_firmware: efi
+    networks:
+      - name: "{{ network }}"
+        mac: "{{ item.value.mac_addr }}"
+        device_tpye: vmxnet3
+  delegate_to: localhost        
+  with_dict: "{{ vms }}"
+
+- name: Add TPM Module to VM on VMware
+  community.vmware.vmware_guest_tpm:
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter }}"
+    folder: "{{ folder }}"
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: present
+  delegate_to: localhost        
+  with_dict: "{{ vms }}"
+
+
+- name: Poweron VM on VMware
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter }}"
+    folder: "{{ folder }}"
+    name: "{{ machine_reg }}-{{ item.key }}"
+    state: poweredon
+  delegate_to: localhost        
+  with_dict: "{{ vms }}"

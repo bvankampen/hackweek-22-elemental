@@ -38,7 +38,7 @@
           elemental:
             install:
               reboot: true
-              device: /dev/vda
+              device: "{{ elemental_install_device }}"
               debug: true
         machineInventoryLabels:
           location: "{{ node_location }}"

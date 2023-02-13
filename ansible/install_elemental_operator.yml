@@ -2,9 +2,9 @@
 - name: Install Elemental Operator
   hosts: localhost
   vars:
-    install_psp: yes
+    install_psp: no
   gather_facts: false
   roles:
     - create_elemental_psp
-    # - install_elemental_operator
+    - install_elemental_operator
 
