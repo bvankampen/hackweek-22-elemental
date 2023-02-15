@@ -2,7 +2,7 @@
 - name: Install Elemental Operator
   hosts: localhost
   vars:
-    install_psp: no
+    install_psp: false
   gather_facts: false
   roles:
     - create_elemental_psp

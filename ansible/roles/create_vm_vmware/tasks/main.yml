@@ -55,3 +55,4 @@
     state: poweredon
   delegate_to: localhost        
   with_dict: "{{ vms }}"
+  when: poweron_vm
