@@ -6,6 +6,8 @@ kubeconfig: "~/.kube/rancher-p6lab.yaml"
 elemental_iso_url: "https://download.opensuse.org/repositories/isv:/Rancher:/Elemental:/Stable:/Teal53/media/iso/elemental-teal.x86_64.iso"
 iso_add_reg_url: "https://raw.githubusercontent.com/rancher/elemental/main/.github/elemental-iso-add-registration"
 elemental_install_device: "/dev/sda" # /dev/vda for kvm /dev/sda for vmware
+node_username: "root"
+node_password: "root"
 
 # Variables for Vcenter Deployment
 vcenter_host: "{{ lookup('env','VCENTER_HOST') }}"
