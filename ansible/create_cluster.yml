@@ -9,7 +9,7 @@
   hosts: localhost
   gather_facts: false
   roles:
-    - machine_registration
+    - create_machine_registration
 
 - name: Build Elemental ISO
   hosts: localhost

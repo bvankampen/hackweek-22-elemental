@@ -3,6 +3,6 @@
   hosts: localhost
   gather_facts: false
   vars:
-    poweron_vm: true
+    poweron_vm: false
   roles:
     - create_vm_vmware
